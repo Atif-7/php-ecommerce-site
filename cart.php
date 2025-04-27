@@ -48,6 +48,7 @@ require_once 'config/database.php';
         foreach ($_SESSION['cart'] as $key => $value) { 
             if ($value['product_id'] === $_POST['item']) {
                 unset($_SESSION['cart'][$key]);
+                unset($_SESSION['total_amount']);
                 $_SESSION['cart'] = array_values($_SESSION['cart']);
                 header('location:view_cart.php');
             }

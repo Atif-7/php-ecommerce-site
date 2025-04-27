@@ -3,9 +3,8 @@
 session_start();
 require_once 'config/config.php';
 require_once 'config/database.php';
-
+$SESSION['total_amount'] = 0 ;
 $g_total = 0;
-
 require_once 'head.php';
 echo "<title>Cart- E-Shop</title>
     <style>td {align-content:center } @media (max-width: 768px) { td { height:50px !important; padding: 5px 9px 0 !important; align-content: center !important; } }</style>";
@@ -39,7 +38,7 @@ require_once 'header.php';
                     foreach ($_SESSION['cart'] as $key => $item) { 
                     $total = $item['product_price'] * $item["product_quantity"];  
                     $g_total += $total;
-                    $_SESSION['total_amount'] = $g_total;
+                    echo $_SESSION['total_amount'] = $g_total;
                 ?>
                 <tbody>
                     <form action="cart.php" method="POST">
@@ -73,7 +72,7 @@ require_once 'header.php';
             <div class="shop">
                 
                 <form method="POST" action="checkout.php" class="d-flex align-items-center">
-                    <input type="text" disabled class="g-total fw-bold fs-5 text-success text-center" value="Grand Total = <?php echo $g_total ?>">
+                    <input type="text" disabled class="g-total fw-bold fs-5 text-success text-center" value="Grand Total = <?php echo $g_total?>">
                     <input type="submit" class="btn btn-success mx-2 fw-bold" value="Checkout">
                 </form>
                 
