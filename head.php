@@ -17,6 +17,7 @@ $categories = $query->getData('*','categories','all')->fetch_all(MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1bb566">
     <link rel="shortcut icon" href="<?php echo BASE_URL ; ?>fav_icon.png" type="image/x-icon">
     <link rel="stylesheet" href="<?php echo BASE_URL ; ?>assets/css/style.css">
     <link rel="stylesheet" href="<?php echo BASE_URL ; ?>assets/css/bootstrap.min.css">
