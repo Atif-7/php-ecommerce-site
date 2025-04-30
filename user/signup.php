@@ -40,8 +40,8 @@
                 $data = array('name'=>$name, 'email'=>$email, 'password'=>$hashed);
                 $result = $query->insertData('users',$data);
                 if($result){
-                    $_SESSION['id'] = mysqli_insert_id($query->$conn);
                     session_start();
+                    $_SESSION['user_id'] = mysqli_insert_id($db->getConn());
                     $_SESSION['name'] = $name;
                     $_SESSION['loggedin']=true;
                     header("location: account.php");

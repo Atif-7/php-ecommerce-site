@@ -1,0 +1,8 @@
+.env
+checkout.php
+/vendor/
+/node_modules/
+/vendor/stripe/
+/vendor/composer/
+/.idea/
+/*.log

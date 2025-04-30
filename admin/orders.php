@@ -1,51 +1,29 @@
-<?php 
+<?php
 session_start();
-require_once '../config/config.php';
 require_once "../config/database.php";
-if (!isset($_SESSION['loggedin'])) {
-    header('location: login.php');
-}
 
-$user_id = $_SESSION['user_id'];
-$orders = $query->getDataWhere('*','orders','WHERE user_id = "'.$user_id.'"');
+$orders = $query->getData('*','orders','all');
 
 require_once '../head.php';
-echo "<title>Account - E-Shop</title>";
-echo "<style> 
-section{
-margin-top: 140px;
-}
-button {
-    background: blue;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-}
-@media (max-width: 768px) {
-section{
-margin-top: 200px;
-width: 95% !important;
-}
-}
-</style>";
-require_once '../header.php';
+echo "<title>Orders - E-Shop</title><style>
+    section {
+            margin-top: 105px;
+            margin-bottom: 70px;
+        }
+    @media (max-width: 768px) {
+        section {
+            margin-top: 110px;
+        }
+    }</style>";
+require_once 'header.php';
 ?>
-  <section class="container-fluid w-100">
-    <div class="bg-light d-flex justify-content-between w-100 align-items-center">
-        <h2 style="text-transform:uppercase"><?= $_SESSION['name'] ?></h2>
-        <div><a href="logout.php" class="btn btn-danger">Logout</a></div>
-    </div>
+    <section class="shop">
+        <div class="container main-heading bg-light">
+            <h2>Placed Orders</h2>
+            <a href="index.php" class="btn btn-dark"><< Back to Admin</a>
+        </div>
 
-    <?php if (isset($_SESSION['error'])): ?>
-        <p style="color: red;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
-    <?php endif; ?>
-
-    <div class="container shop mt-5">
-        <h3>My Orders</h3>
-        <?php if ($orders->num_rows > 0) { ?>
-        <div class="table-container d-flex justify-content-center">
-            <table class="table table-sm table-bordered table-striped">
+        <table class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>S.No</th>
@@ -83,12 +61,8 @@ require_once '../header.php';
                 ?>
                 </tbody>
             </table>
-        </div>
-        <?php }else{
-            echo "<p>you have no order(s) placed yet.";
-        } ?>
-    </div>
-  </section>
+    </section>
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
 <?php include "../footer.php" ?>

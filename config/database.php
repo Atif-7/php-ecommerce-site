@@ -1,5 +1,5 @@
 <?php
-class database
+class Database
 {
     private $server;
     private $username;
@@ -18,10 +18,17 @@ class database
             die("database connect error :".$this->conn->connect_error);
         }
     }
+    public function getConn(){
+        return $this->conn;
+    }
 }
 
-class Query extends database
+class Query extends Database
 {
+    public function runQuery($sql) {
+        $result = $this->conn->query($sql);
+        return $result;
+    }
     public function insertData($table,$data) {
        
         $values = array();

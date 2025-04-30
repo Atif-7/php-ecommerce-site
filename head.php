@@ -5,7 +5,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 require_once __DIR__.'/config/config.php';
 require_once __DIR__."/config/database.php";
 
-$query = new Query();
+$query = new Query($db);
 
 $main_categories = $query->getDataWhere('*','categories','WHERE parent_id IS NULL');
 $categories = $query->getData('*','categories','all')->fetch_all(MYSQLI_ASSOC);

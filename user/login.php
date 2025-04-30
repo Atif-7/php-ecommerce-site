@@ -37,7 +37,7 @@
         while ($row = mysqli_fetch_assoc($result)) {
           if (password_verify($password, $row['password'])) {
             session_start();
-            $_SESSION['id'] = $row['id'];
+            $_SESSION['user_id'] = $row['id'];
             $_SESSION['name'] = $row['name'];
             $_SESSION['activation'] = $row['activated'];
             $_SESSION['loggedin']=true;

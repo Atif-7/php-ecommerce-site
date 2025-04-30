@@ -38,7 +38,7 @@ require_once 'header.php';
                     foreach ($_SESSION['cart'] as $key => $item) { 
                     $total = $item['product_price'] * $item["product_quantity"];  
                     $g_total += $total;
-                    echo $_SESSION['total_amount'] = $g_total;
+                    $_SESSION['total_amount'] = $g_total;
                 ?>
                 <tbody>
                     <form action="cart.php" method="POST">
