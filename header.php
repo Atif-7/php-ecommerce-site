@@ -72,7 +72,7 @@
 
                 if($current_page == "account.php") { echo ' active-link"';}else{echo '"' ;}
 
-                echo ' onclick="myFunction(this)">👤 '.$_SESSION["name"].' ⌵</a>
+                echo ' onclick="myFunction(this)">👤 '.$_SESSION["user_name"].' ⌵</a>
                     <ul class="dd-menu pb-1" style="width:95px !important; left:15px;">
                         <li><a href="'.BASE_URL.'user/account.php"';
                         if($current_page == "account.php") { echo ' class="active-link"';}

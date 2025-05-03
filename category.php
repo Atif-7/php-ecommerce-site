@@ -19,7 +19,7 @@ if ($result['parent_id'] == null) {
 $products = $query->getDataWhere('*','products',' WHERE category_id = "'.$category_id.'"');
 
 require_once 'head.php';
-echo "<title> E-Shop - {$category_name} </title><style>section {
+echo "<title> E-Shop | {$category_name} </title><style>section {
         margin-top: 140px !important;
     } 
     @media (max-width: 768px) {

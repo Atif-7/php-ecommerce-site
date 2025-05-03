@@ -3,7 +3,7 @@ session_start();
 require_once 'config/database.php';
 $products = $query->getData('*','products','all');
 require_once 'head.php';
-echo "<title>Shop - E-Shop</title>";
+echo "<title>Shop | E-Shop</title>";
 require_once 'header.php';
 
 ?>

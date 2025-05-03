@@ -5,12 +5,12 @@ require_once "../config/database.php";
 if (!isset($_SESSION['loggedin'])) {
     header('location: login.php');
 }
-
+$order_id = $_GET['id'];
 $user_id = $_SESSION['user_id'];
-$orders = $query->getDataWhere('*','orders','WHERE user_id = "'.$user_id.'"');
+$items = $query->getDataWhere('*','order_items','WHERE order_id = "'.$order_id.'"');
 
 require_once '../head.php';
-echo "<title>Account | E-Shop</title>";
+echo "<title>Order Details | E-Shop</title>";
 echo "<style> 
 section{
 margin-top: 140px;
@@ -42,24 +42,23 @@ require_once '../header.php';
     <?php endif; ?>
 
     <div class="container shop mt-5">
-        <h3>My Orders</h3>
-        <?php if ($orders->num_rows > 0) { ?>
+        <h3>Orders Details (order_id: <?= $order_id ?>)</h3>
+        <?php if ($items->num_rows > 0) { ?>
         <div class="table-container d-flex justify-content-center">
             <table class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        <th>Order_ID</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
                         <th>Total</th>
-                        <th>Payment Staus</th>
-                        <th>Order Staus</th>
-                        <th>Created_at</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php
-                $result = $orders->fetch_all(MYSQLI_ASSOC); 
+                $result = $items->fetch_all(MYSQLI_ASSOC); 
                 foreach ($result as $key => $row) {
                     // $category_id = (int)$product['category_id'];
                     // $category_row = $query->getDataById('name','categories',$category_id)->fetch_assoc();
@@ -67,16 +66,11 @@ require_once '../header.php';
                 ?>
                 <tr scop="row">
                     <td data-label="S. No"><?php echo $key + 1 ?></td>
-                    <td data-label="ID"><a href="order_details.php?id=<?php echo $row['id'] ?>"><?php echo $row['id'] ?></a></td>
-                    <td data-label="Total"><?php echo '$'.$row['total_amount'] ?></td>
-                    <td data-label="Payment Status"><?php echo $row['payment_status'] ?></td>
-                    <td data-label="Order Status"><?php echo $row['order_status'] ?></td>
-                    <td data-label="Created_at"><?php echo $row['created_at'] ?></td>
-                    <td data-label="Actions" width="240px">
-                        <a class="btn btn-dark btn-sm" href='order_query.php?id=<?php echo $row["id"] ?>'>Message</a> 
-                        <!-- |
-                        <a class="btn btn-danger btn-sm" href='cancel_order.php?id=<?php echo $row["id"] ?>' onclick="confirm('Are you sure to cancel this order : <?php echo $row['id'] ?>')">Cancel</a> -->
-                    </td>
+                    <td data-label="ID"><?php echo $row['product_id'] ?></td>
+                    <td data-label="Name"><?php echo $row['name'] ?></td>
+                    <td data-label="Price"><?php echo '$'.$row['price'] ?></td>
+                    <td data-label="Quantity"><?php echo $row['quantity'] ?></td>
+                    <td data-label="Total"><?php echo '$'.$row['price'] * $row['quantity'] ?></td>
                 </tr>
                 <?php 
                 }

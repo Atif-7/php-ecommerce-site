@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 require_once 'head.php';
-echo "<title>Contact Us - E-Shop</title>
+echo "<title>Contact Us | E-Shop</title>
     <style>
         button {
             background: #333;

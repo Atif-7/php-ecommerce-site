@@ -24,6 +24,7 @@ if (isset($_POST['stripeToken'])) {
 if (isset($_GET['session_id'])) {
   // Assume session contains user_id and cart total
   $user_id = $_SESSION['user_id'];
+  $user_name = $_SESSION['user_name'];
   // $total = $_SESSION['total_amount'];
   // $payment_id = $_POST['payment_id']; // Stripe session/payment id
   // Load environment variables
@@ -45,23 +46,31 @@ if (isset($_GET['session_id'])) {
     $check = $query->getDataWhere("id","orders", "WHERE payment_id = '$payment_id'");
 
     if ($check->num_rows == 0) {
-      $data = array("user_id"=>$user_id, "total_amount"=>$amount_total, "payment_status"=>$payment_status,"order_status"=>"Pending","payment_id"=>$payment_id);
-      $query->insertData('orders',$data);
-
+      $data = array("user_id"=>$user_id, "user_name"=>$user_name, "total_amount"=>$amount_total, "payment_status"=>$payment_status,"order_status"=>"Pending","payment_id"=>$payment_id);
+      $order_id = $query->insertData('orders',$data);
+       // Insert order items
+      foreach ($_SESSION['cart'] as $product) {
+        $product_id = $product['product_id'];
+        $name = $product['product_name'];
+        $quantity = $product['product_quantity'];
+        $price = $product['product_price'];
+        $data = array("order_id"=>$order_id, "product_id"=>$product_id, "name"=>$name, "quantity"=>$quantity,"price"=>$price);
+        $query->insertData("order_items",$data);
+      }
       // Empty cart after placing order
       unset($_SESSION['cart']);
       // $_SESSION['order_id'] = mysqli_insert_id($conn); // Get the last inserted order ID
-      header("Location: order_success.php");
+      header("Location: order_successful.php");
       exit;
     }
     else {
       $order_placed = "❌ Order already placed!";
     }
   } else {
-      echo "❌ Payment not completed."; exit;
+    echo "❌ Payment not completed."; exit;
   }
 } else {
-echo "❌ No session ID provided!"; exit;
+  echo "❌ No session ID provided!"; exit;
 }
 
 require_once "head.php";
@@ -76,4 +85,3 @@ require_once "header.php";
         <a href="user/account.php" class="btn btn-primary">Go to Dashboard </a>
       </div>
     </section>
-<?php include "footer.php" ?>

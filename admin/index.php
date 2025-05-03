@@ -6,7 +6,7 @@ require_once '../config/database.php';
 $products = $query->getData('*','products','all');
 
 require_once '../head.php';
-echo "<title>Admin panel - E-Shop</title>
+echo "<title>Admin panel | E-Shop</title>
     <style>
     section {
             margin-top: 80px;

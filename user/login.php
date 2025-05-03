@@ -38,7 +38,7 @@
           if (password_verify($password, $row['password'])) {
             session_start();
             $_SESSION['user_id'] = $row['id'];
-            $_SESSION['name'] = $row['name'];
+            $_SESSION['user_name'] = $row['name'];
             $_SESSION['activation'] = $row['activated'];
             $_SESSION['loggedin']=true;
             header('Location: account.php');
@@ -52,7 +52,7 @@
     }
   }
   require_once('../head.php');
-  echo "<title>E-Shop - Login</title>";
+  echo "<title>E-Shop | Login</title>";
   require_once('../header.php');
 ?>
 <section class="shop">

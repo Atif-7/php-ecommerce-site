@@ -6,7 +6,7 @@ require_once 'config/database.php';
 $SESSION['total_amount'] = 0 ;
 $g_total = 0;
 require_once 'head.php';
-echo "<title>Cart- E-Shop</title>
+echo "<title>Cart | E-Shop</title>
     <style>td {align-content:center } @media (max-width: 768px) { td { height:50px !important; padding: 5px 9px 0 !important; align-content: center !important; } }</style>";
 require_once 'header.php';
 ?>

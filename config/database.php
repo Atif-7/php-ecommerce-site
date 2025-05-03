@@ -42,8 +42,12 @@ class Query extends Database
         $values = "'".$values."'";
 
         $sql = "INSERT INTO `$table` ($fields) VALUES($values)";
-        $result = $this->conn->query($sql);
-        return $result;
+        
+        if ($this->conn->query($sql)) {
+            return $this->conn->insert_id;  // ✅ return ID here
+        } else {
+            throw new Exception("Insert error: " . $this->conn->error);
+        }
 
     }
     function updateData($tablename,$data,$f_value){

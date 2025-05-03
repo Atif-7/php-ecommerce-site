@@ -5,7 +5,7 @@ require_once "../config/database.php";
 $orders = $query->getData('*','orders','all');
 
 require_once '../head.php';
-echo "<title>Orders - E-Shop</title><style>
+echo "<title>Orders | E-Shop</title><style>
     section {
             margin-top: 105px;
             margin-bottom: 70px;
