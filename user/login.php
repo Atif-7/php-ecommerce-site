@@ -28,9 +28,9 @@
       $error	= "<div class='alert alert-danger' role='alert'><strong><p>There were some errors</p></strong>".$error."</div>";
         
     }else{
-      $query = "SELECT * FROM `users` WHERE Email='$email'";
-      $conn = new mysqli("localhost","root","","ecommerce");
-      $result = mysqli_query($conn,$query);
+      // $query = "SELECT * FROM `users` WHERE Email='$email'";
+      // $conn = new mysqli("localhost","root","","ecommerce");
+      $result = $query->runQuery("SELECT * FROM `users` WHERE Email='$email'");
 
       if (mysqli_num_rows($result) == 1) {
 

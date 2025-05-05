@@ -42,7 +42,7 @@
                 if($result){
                     session_start();
                     $_SESSION['user_id'] = mysqli_insert_id($db->getConn());
-                    $_SESSION['name'] = $name;
+                    $_SESSION['user_name'] = $name;
                     $_SESSION['loggedin']=true;
                     header("location: account.php");
                 }else{
@@ -54,7 +54,7 @@
     }
   
     require_once('../head.php'); 
-    echo "<title>E-Shop - Signup</title>";
+    echo "<title>E-Shop | Signup</title>";
     require_once('../header.php'); 
 
 ?>

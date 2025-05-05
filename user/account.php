@@ -70,7 +70,13 @@ require_once '../header.php';
                     <td data-label="ID"><a href="order_details.php?id=<?php echo $row['id'] ?>"><?php echo $row['id'] ?></a></td>
                     <td data-label="Total"><?php echo '$'.$row['total_amount'] ?></td>
                     <td data-label="Payment Status"><?php echo $row['payment_status'] ?></td>
-                    <td data-label="Order Status"><?php echo $row['order_status'] ?></td>
+                    <td data-label="Order Status" <?php if($row['order_status'] == 'Completed'){ echo "class='text-success'";}elseif ($row['order_status'] == 'Shipped') {
+                        echo "class='text-danger'";
+                    }elseif ($row['order_status'] == 'Processing') {
+                        echo "class='text-primary'";
+                    }else{
+                        echo "class='text-secondary'";
+                    } ?>><?php echo $row['order_status'] ?></td>
                     <td data-label="Created_at"><?php echo $row['created_at'] ?></td>
                     <td data-label="Actions" width="240px">
                         <a class="btn btn-dark btn-sm" href='order_query.php?id=<?php echo $row["id"] ?>'>Message</a> 

@@ -26,8 +26,9 @@ require_once 'header.php';
         <div class="mt-5 text-center w-75">
             <h1 class="text-secondary mb-4">Admin Dashboard </h1>
             <div class="link-container justify-content-around w-100">
-                <a href="products.php" class="btn btn-success">🛒 Manage Products</a>
-                <a href="categories.php" class="btn btn-warning text-white">Manage Categories</a>
+                <a href="products.php" class="btn btn-success">🛒 Products</a>
+                <a href="categories.php" class="btn btn-warning text-white">Categories</a>
+                <a href="users.php" class="btn btn-secondary text-white">Users</a>
                 <a href="orders.php" class="btn btn-danger">Manage orders</a>
                 <a href="contacts.php" class="btn btn-primary">📩 Contact Messages</a>
                 <a href="logout.php" class="btn btn-dark">🚪 Logout</a>

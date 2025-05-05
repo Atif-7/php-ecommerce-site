@@ -28,9 +28,10 @@ require_once 'header.php';
                     <tr>
                         <th>S.No</th>
                         <th>Order_ID</th>
+                        <th>User Name</th>
                         <th>Total</th>
-                        <th>Payment Staus</th>
-                        <th>Order Staus</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
                         <th>Created_at</th>
                         <th>Actions</th>
                     </tr>
@@ -45,10 +46,40 @@ require_once 'header.php';
                 ?>
                 <tr scop="row">
                     <td data-label="S. No"><?php echo $key + 1 ?></td>
-                    <td data-label="ID"><?php echo $row['id'] ?></td>
+                    <td data-label="ID"><a href="order_details.php?id=<?php echo $row['id'] ?>"><?php echo $row['id'] ?></a></td>
+                    <td data-label="Name"><a class="text-primary nav-link" href="user_details.php?id=<?php echo $row['user_id'] ?>"><?php echo $row['user_name'] ?></a></td>
                     <td data-label="Total"><?php echo '$'.$row['total_amount'] ?></td>
-                    <td data-label="Payment Status"><?php echo $row['payment_status'] ?></td>
-                    <td data-label="Order Status"><?php echo $row['order_status'] ?></td>
+                    <td data-label="Payment Status"><form method="post" action="update_status.php">
+                        <input type="hidden" name="order_id" value="<?= $row['id'] ?>">
+                        <select name="payment_status" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option class="fw-bold" value="<?= $row['payment_status'] ?>" selected><?= $row['payment_status'] ?></option>
+                            <?php
+                            $statuses = ['Processing', 'Paid'];
+                            $key = array_search($row['payment_status'],$statuses);
+                            if ($key !== false) {
+                                unset($statuses[$key]);
+                            }
+                            print_r($statuses);
+                            $rem_statuses = array_values($statuses);
+                            foreach ($rem_statuses as $status) {
+                                echo "<option value='$status'>$status</option>";
+                                // $selected = $row['payment_status'] === $status ? "selected" : "";
+                            }
+                            ?>
+                        </select>
+                    </form></td>
+                    <td data-label="Order Status"><form method="post" action="update_status.php">
+                        <input type="hidden" name="order_id" value="<?= $row['id'] ?>">
+                        <select name="order_status" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <?php
+                            $statuses = ['Pending', 'Processing', 'Shipped', 'Completed'];
+                            foreach ($statuses as $status) {
+                                $selected = $row['order_status'] === $status ? "selected" : "";
+                                echo "<option value='$status' $selected>$status</option>";
+                            }
+                            ?>
+                        </select>
+                    </form></td>
                     <td data-label="Created_at"><?php echo $row['created_at'] ?></td>
                     <td data-label="Actions" width="240px">
                         <a class="btn btn-dark btn-sm" href='order_query.php?id=<?php echo $row["id"] ?>'>Message</a> 
@@ -60,7 +91,7 @@ require_once 'header.php';
                 }
                 ?>
                 </tbody>
-            </table>
+        </table>
     </section>
     <script src="../assets/js/script.js"></script>
 </body>

@@ -2,13 +2,15 @@
 session_start();
 require_once '../config/config.php';
 require_once "../config/database.php";
-if (!isset($_SESSION['loggedin'])) {
-    header('location: login.php');
-}
+// if (!isset($_SESSION['loggedin'])) {
+//     header('location: login.php');
+// }
 $order_id = $_GET['id'];
-$user_id = $_SESSION['user_id'];
+// $user_id = $query->getDataWhere("user_name","orders","WHERE id = ");
 $items = $query->getDataWhere('*','order_items','WHERE order_id = "'.$order_id.'"');
+
 $g_total = 0;
+
 require_once '../head.php';
 echo "<title>Order Details | E-Shop</title>";
 echo "<style> 
@@ -32,19 +34,14 @@ width: 95% !important;
 require_once '../header.php';
 ?>
   <section class="container-fluid w-100">
-    <div class="bg-light d-flex justify-content-between w-100 align-items-center">
-        <h2 style="text-transform:uppercase"><a href="account.php" class="nav-link"><?= $_SESSION['user_name'] ?></a></h2>
-        <div><a href="logout.php" class="btn btn-danger">Logout</a></div>
-    </div>
-
     <?php if (isset($_SESSION['error'])): ?>
         <p style="color: red;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
     <?php endif; ?>
 
-    <div class="container shop mt-5">
-        <div class="main-heading">
+    <div class="container shop">
+        <div class="main-heading mt-5">
             <h3 class="text-secondary">Orders Details (order_id: <?= $order_id ?>)</h3>
-            <a href="account.php" class="btn btn-secondary">&lt; Back</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">&lt; Back</a>
         </div>
         <?php if ($items->num_rows > 0) { ?>
         <div class="table-container d-flex flex-column align-items-center justify-content-center">
@@ -82,7 +79,7 @@ require_once '../header.php';
             <input type="text" value="Grand Total = $<?= $g_total ?>" class="w-25 fs-5 text-center text-success" disabled>
         </div>
         <?php }else{
-            echo "<p>you have no order(s) placed yet.";
+            echo "<p>you have no item(s) orders yet.";
         } ?>
     </div>
   </section>
