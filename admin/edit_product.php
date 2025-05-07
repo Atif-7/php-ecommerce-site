@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
 require_once '../config/database.php';
 
 if (isset($_GET['id'])) {
@@ -39,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 require_once '../head.php';
-echo "<title>Edit Product - E-Shop</title><style>
+echo "<title>Edit Product | E-Shop</title><style>
     section {
             margin-top: 140px;
         }
@@ -84,6 +89,6 @@ require_once 'header.php';
             <button class="btn btn-success btn-lg text-light" type="submit">Save</button>
         </div>
     </form>
-    <footer>
-        copyright Atif &copy; 2025 - All Rights Reserved
-    </footer>
+    </section>
+  <?php
+require_once '../footer.php'; ?>

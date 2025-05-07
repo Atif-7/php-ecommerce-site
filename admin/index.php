@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
+
 require_once '../config/config.php';
 require_once '../config/database.php';
 
@@ -28,20 +33,19 @@ require_once 'header.php';
             <div class="link-container justify-content-around w-100">
                 <a href="products.php" class="btn btn-success">🛒 Products</a>
                 <a href="categories.php" class="btn btn-warning text-white">Categories</a>
-                <a href="users.php" class="btn btn-secondary text-white">Users</a>
                 <a href="orders.php" class="btn btn-danger">Manage orders</a>
                 <a href="contacts.php" class="btn btn-primary">📩 Contact Messages</a>
-                <a href="logout.php" class="btn btn-dark">🚪 Logout</a>
+                <a href="users.php" class="btn btn-secondary text-white">Users</a>
+                <a href="admins.php" class="btn btn-dark"> Admins</a>
             </div>
         </div>
             <div id="alerts"><?php if (isset($_SESSION['success'])) {
                 echo "<span class='d-flex'><p class='alert alert-success' role='alert'>{$_SESSION['success']}</p><button id='cross' class='btn-cross'> X </button></span>";
-                session_unset();
-                session_destroy();
+                unset($_SESSION['success']);
                 }
                 if (isset($_SESSION['delete'])) {
                 echo "<span class='d-flex'><p class='alert alert-warning' role='alert'>{$_SESSION['delete']}</p><button id='cross' class='btn-cross'> X </button></span>";
-                session_destroy();
+                unset($_SESSION['delete']);
                 }
                 ?>
             </div>

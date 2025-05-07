@@ -52,7 +52,7 @@ require_once 'config/database.php';
                 $_SESSION['cart'] = array_values($_SESSION['cart']);
                 header('location:view_cart.php');
             }
-            $_SESSION['deleted'] = "{$product_name} has been removed from your cart";
+            $_SESSION['deleted'] = "<b>{$product_name}</b> has been removed from your cart";
         } 
     }    
 
@@ -60,6 +60,7 @@ require_once 'config/database.php';
         foreach ($_SESSION['cart'] as $key => $value) { 
             if ($value['product_id'] === $_POST['item']) {
                 $_SESSION['cart'][$key] = array('product_id' => $product_id, 'product_name' => $product_name, 'product_quantity' => $quantity, 'product_price' => $product_price);
+                $_SESSION['success'] = "<b>{$product_name}</b> quantity updated to <b>{$quantity}</b>";
                 header('location:view_cart.php');
             }
         }

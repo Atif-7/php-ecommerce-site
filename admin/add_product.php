@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
+
 require_once '../config/database.php';
 
 $categories = $query->getData('*','categories','all');
@@ -27,7 +33,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 require_once '../head.php';
-echo "<title>Add Product - E-Shop</title>";
+echo "<title>Add Product - E-Shop</title><style>
+    section {
+            margin-top: 105px;
+            margin-bottom: 70px;
+        }
+    @media (max-width: 768px) {
+        section {
+            margin-top: 120px;
+        }
+    }</style>";
 require_once 'header.php';
 ?>   
     <section class="shop">

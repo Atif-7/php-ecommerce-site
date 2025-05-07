@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
 require_once "../config/database.php";
 
 $orders = $query->getData('*','orders','all');
@@ -22,7 +26,16 @@ require_once 'header.php';
             <h2>Placed Orders</h2>
             <a href="index.php" class="btn btn-dark"><< Back to Admin</a>
         </div>
-
+        <div id="alerts">
+            <?php if (isset($_SESSION['error'])) {
+                echo "<span class='d-flex'><p class='alert alert-danger' role='alert'>".$_SESSION['msg']."</p><button id='cross' class='btn-cross'> X </button></span>";
+                unset($_SESSION['error']);
+            }
+            if (isset($_SESSION['success'])) {
+                echo "<span class='d-flex'><p class='alert alert-success' role='alert'>".$_SESSION['success']."</p><button id='cross' class='btn-cross'> X </button></span>";
+                unset($_SESSION['success']);
+            } ?>
+        </div>
         <table class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr>
@@ -94,6 +107,4 @@ require_once 'header.php';
         </table>
     </section>
     <script src="../assets/js/script.js"></script>
-</body>
-</html>
 <?php include "../footer.php" ?>

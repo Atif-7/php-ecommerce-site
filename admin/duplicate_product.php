@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
 require_once '../config/database.php';
 
 if (isset($_GET['id'])) {
@@ -52,8 +57,7 @@ require_once 'header.php';
         </div>
         <?php if (isset($_SESSION['error'])) {
             echo "<p class='alert alert-danger' role='alert'>".$_SESSION['error']."</p>";
-            session_unset();
-            session_destroy();
+            unset($_SESSION['error']);
         } ?>
          <form method="POST" class="form-border mt-2" enctype="multipart/form-data">
             <div class="admin-form">
@@ -85,6 +89,4 @@ require_once 'header.php';
     </section>
 
     <script src="<?= BASE_URL ; ?>assets/js/script.js"></script>
-</body>
-</html>
 <?php include '../footer.php' ?>

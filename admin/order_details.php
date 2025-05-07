@@ -1,5 +1,9 @@
 <?php 
 session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
 require_once '../config/config.php';
 require_once "../config/database.php";
 // if (!isset($_SESSION['loggedin'])) {

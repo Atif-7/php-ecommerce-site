@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
+
 require_once "../config/database.php";
 
 $messages = $query->getData('*','contacts','all');
@@ -46,6 +51,4 @@ require_once 'header.php';
         </table>
     </section>
     <script src="../assets/js/script.js"></script>
-</body>
-</html>
 <?php include "../footer.php" ?>

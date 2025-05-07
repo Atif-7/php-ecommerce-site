@@ -1,4 +1,9 @@
     <?php 
+    session_start();
+    if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+        header("Location: admin_login.php");
+        exit;
+    }
     $user_id = $_GET['id'];
     require_once('../config/database.php');
     if (isset($user_id)) {
@@ -97,3 +102,5 @@
                 </table>
             </div>
         </section>
+        <script src="<?= BASE_URL ; ?>/assets/js/script.js"></script>
+        <?php include "../footer.php"; ?>

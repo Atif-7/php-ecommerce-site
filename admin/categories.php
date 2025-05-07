@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
 require_once '../config/database.php';
 
 // $categories = $query->getData('*','categories','0');
@@ -47,7 +51,7 @@ require_once '../config/database.php';
     $categories = $query->getData("*","categories","all")->fetch_all(MYSQLI_ASSOC);
     
 require_once '../head.php';
-echo "<title>Add Category - E-Shop</title><style>
+echo "<title>Categories | E-Shop</title><style>
     section {
             margin-top: 120px !important;
         }
@@ -67,24 +71,22 @@ require_once 'header.php';
         <div id="alerts">
         <?php if (isset($_SESSION['error'])) {
             echo "<span class='d-flex'><p class='alert alert-danger' role='alert'>".$_SESSION['error']."</p><button id='cross' class='btn-cross'> X </button></span>";
-            session_unset();
-            session_destroy();
+            unset($_SESSION['error']);
         }
         if (isset($_SESSION['success'])) {
             echo "<span class='d-flex'><p class='alert alert-success' role='alert'>".$_SESSION['success']."</p><button id='cross' class='btn-cross'> X </button></span>";
-            session_unset();
-            session_destroy();
+            unset($_SESSION['success']);
         } ?>
         </div>
-        <form class="form w-75 form-border" method="post">
-            <legend class="text-center">Add Category</legend>
-            <div class="admin-form">
-                Name: <input class="form-control w-25 col-md-5" type="text" name="name" required>
-                <select class="form-select w-30" name="parent_id">
-                    <option value="">No Parent (Main Category)</option>
-                    <?php foreach ($main_categories as $cat) { ?>
-                        <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
-                        <?php } ?>
+            <form class="form w-75 form-border" method="post">
+                <legend class="text-center">Add Category</legend>
+                <div class="admin-form">
+                    Name: <input class="form-control w-25 col-md-5" type="text" name="name" required>
+                    <select class="form-select w-30" name="parent_id">
+                        <option value="">No Parent (Main Category)</option>
+                        <?php foreach ($main_categories as $cat) { ?>
+                            <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
+                            <?php } ?>
                     </select>
                     <button type="submit"  name="add_category" class="btn btn-success">Add Category</button>
                 </div>
@@ -127,8 +129,4 @@ require_once 'header.php';
     </section>
 
     <script src="<?= BASE_URL ; ?>assets/js/script.js"></script>
-    <footer>
-        copyright Atif &copy; 2025 - All Rights Reserved
-    </footer>
-</body>
-</html>
+    <?php include(BASE_URL."footer.php") ?>

@@ -18,6 +18,10 @@ require_once 'header.php';
             echo "<div id='alerts'><span class='d-flex'><p class='alert alert-warning' role='alert'>{$_SESSION['deleted']}</p><button id='cross' class='btn-cross'> X </button></span></div>";
             unset($_SESSION['deleted']);
             }
+            if (isset($_SESSION['success'])) {
+                echo "<div id='alerts'><span class='d-flex'><p class='alert alert-primary' role='alert'>{$_SESSION['success']}</p><button id='cross' class='btn-cross'> X </button></span></div>";
+                unset($_SESSION['success']);
+            }
         ?>
         
         <h1 class="text-center"> My Cart <span style="opacity:0.85">🛒</span></h1>
@@ -54,15 +58,16 @@ require_once 'header.php';
                     <input type="hidden" value="<?php echo $item["product_price"] ?>" name="product_price">
                     <h3 style="color: var(--dark); font-size: 18px;"><?php echo $item["product_price"] ?>$</h3>
                     </td>
-                    <td data-label="Quantity">
+                    <td data-label="Quantity" class="d-flex justify-content-center align-items-center">
                     <h3 style="color: var(--dark); font-size: 18px;"><input type="number" value="<?php echo $item["product_quantity"] ?>" class="text-center" max="10" min="1" name="quantity"></h3>
+                    <button class="btn btn-primary btn-sm ms-2" type="submit" name="update_cart">Update</button>
                     </td>
                     <td data-label="Total">
-                    <h3 style="color: var(--dark); font-size: 18px;"><?php echo $total ?></h3>
+                    <h3 style="color: var(--dark); font-size: 18px;"><?php echo $total ?>$</h3>
                     </td>
                     <input type="hidden" name="item" value="<?php echo $item["product_id"]; ?>">
-                    <td data-label="Actions"><button class="btn btn-primary" type="submit" name="update_cart">Update</button>
-                    <button class="btn btn-danger" type="submit" name="remove_item">Delete</button>
+                    <td data-label="Actions">
+                    <button class="btn btn-danger" type="submit" name="remove_item" onclick="return confirm('remove <?= $item["product_name"] ?>?')">Delete</button>
                     </td>
                     </tr>
                     </form>
@@ -72,7 +77,7 @@ require_once 'header.php';
             <div class="shop">
                 
                 <form method="POST" action="checkout.php" class="d-flex align-items-center">
-                    <input type="text" disabled class="g-total fw-bold fs-5 text-success text-center" value="Grand Total = <?php echo $g_total?>">
+                    <input type="text" disabled class="g-total fw-bold fs-5 text-success text-center" value="Grand Total = <?php echo $g_total?>$">
                     <input type="submit" class="btn btn-success mx-2 fw-bold" value="Checkout">
                 </form>
                 
@@ -83,6 +88,4 @@ require_once 'header.php';
         <!-- </div>              -->
     </div>
 </section>
-</body>
-</html>
 <?php include("footer.php") ?>

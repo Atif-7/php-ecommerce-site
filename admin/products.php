@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] != true ) {
+    header("Location: admin_login.php");
+    exit;
+}
 require_once '../config/database.php';
 
 $products = $query->getData('*','products','0');
@@ -27,18 +31,15 @@ require_once 'header.php';
                 echo "<div id='alerts'>";
                 if (isset($_SESSION['success'])){
                 echo "<span class='d-flex'><p class='alert alert-success' role='alert'>{$_SESSION['success']}</p><button id='cross' class='btn-cross'> X </button></span>";
-                session_unset();
-                session_destroy();
+                unset($_SESSION['success']);
                 }
                 if (isset($_SESSION['delete'])) {
                 echo "<span class='d-flex'><p class='alert alert-warning' role='alert'>{$_SESSION['delete']}</p><button id='cross' class='btn-cross'> X </button></span>";
-                session_unset();
-                session_destroy();
+                unset($_SESSION['delete']);
                 }
                 if (isset($_SESSION['error'])) {
                     echo "<p class='alert alert-danger' role='alert'>".$_SESSION['error']."</p>";
-                    session_unset();
-                    session_destroy();
+                    unset($_SESSION['error']);
                 }
                 echo "</div>";
             }
@@ -89,5 +90,3 @@ require_once 'header.php';
 
     <script src="<?= BASE_URL ; ?>/assets/js/script.js"></script>
     <?php include "../footer.php"; ?>
-</body>
-</html>

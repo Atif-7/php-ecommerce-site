@@ -16,7 +16,12 @@
                 <ul>
                     <li class="nav-item"><a class="nav-link active-link" href="index.php">Admin Panel</a></li>                
                     <li class="nav-item"><a class="nav-link" href="../shop.php">Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.php">Home</a>
+                    </li>
+                    <li class="nav-item"><?php if (isset($_SESSION['admin_logged_in'])): ?>
+                    <a class="btn btn-danger btn-sm" href="logout.php">Logout (<?= $_SESSION['admin_name'] ?>)🚪</a>
+                    <?php endif; ?>
+                    </li>
                 </ul>
             </nav>
             <div id="hamburger">
