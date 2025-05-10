@@ -60,9 +60,10 @@ require_once 'header.php';
 
         <form method="POST" class="form-border mt-2 w-75" enctype="multipart/form-data">
             <div class="admin-form">
-                <label for="name">Name:</label> <input class="form-control w-50" type="text" name="name" value="<?= $category['name'] ?>" required>
+                <label for="name">Name:</label>
+                <input class="form-control w-50" type="text" name="name" value="<?= $category['name'] ?>" required>
                 <?php if ($category['parent_id'] != null) { ?>
-                    <label for="category" class="w-30">Parent Category:</label>
+                    <label for="category" class="w-20 ">Parent Category:</label>
                     <select class="form-select w-50" name="parent_id">
                         <option class="fw-bold" value="<?= $category['parent_id'] ?>" selected><?php if ($category_parent_id == null) {
                             echo "No Parent - Main Category"; 
@@ -83,4 +84,5 @@ require_once 'header.php';
                 <button class="btn btn-success btn-lg text-light" name="update_category" type="submit">Save</button>
             </div>
         </form>
+        </section>
     <?php include '../footer.php' ?>

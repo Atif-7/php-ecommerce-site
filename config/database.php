@@ -75,7 +75,7 @@ class Query extends Database
     public function getData($fields,$table,$quantity){
 
     // Base query
-        $sql = "SELECT $fields FROM $table";
+        $sql = "SELECT $fields FROM $table ORDER BY id DESC";
 
         // Append LIMIT only if quantity is a valid number
         if (is_numeric($quantity) && $quantity > 0) {

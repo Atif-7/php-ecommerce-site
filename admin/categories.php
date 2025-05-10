@@ -82,7 +82,7 @@ require_once 'header.php';
                 <legend class="text-center">Add Category</legend>
                 <div class="admin-form">
                     Name: <input class="form-control w-25 col-md-5" type="text" name="name" required>
-                    <select class="form-select w-30" name="parent_id">
+                    <select class="form-select w-25" name="parent_id">
                         <option value="">No Parent (Main Category)</option>
                         <?php foreach ($main_categories as $cat) { ?>
                             <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>

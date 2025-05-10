@@ -5,6 +5,7 @@
 		header('Location: account.php');
 	}
 
+    $name = $email = $password = $nameErr = $emailErr = $passwordErr = $error = "";
     if ($_SERVER['REQUEST_METHOD']=="POST") {
         require('../config/database.php');
 
@@ -12,43 +13,56 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        $error = "";
-        if (!$name) {
-            $error .= "<p>Name field is requied</p>";
+        if (empty($name)) {
+        $nameErr = "Name is Required";
+        }else {
+            if(!preg_match("/^[a-zA-Z ]*$/", $name)){
+                $nameErr = "only letters and white space allowed";
+            }
         }
-        if (!$email) {
-            $error .= "<p>an email address is requied</p>";
-        }
-        if ($email && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            $error .= "Enter a valid email address";
-        }
-        if (!$password) {
-            $error .= "<p>please enter a password<P/>";
-        }
-        if ($error != "") {
-            $error	= "<div class='alert alert-danger' role='alert'><strong><p>There were some errors</p></strong>".$error."</div>";
-            
-        }else{
-            // $query = "SELECT id FROM `users` WHERE email = '".mysqli_real_escape_string($conn,$_POST['email'])."' LIMIT 1";
-                $result = $query->getDataWhere('id','users','WHERE email = "'.$email.'" LIMIT 1');
 
-            if (mysqli_num_rows($result) > 0) {
-                $error = "<div class='alert alert-danger' role='alert'><strong><p>That email address is already taken.</p></strong></div>";
+        if (empty($email)) {
+            $emailErr = "Email is Required";
+        } else {
+            if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+                $emailErr = "Invalid Email Address";
             }else {
-                $hashed = password_hash($password, PASSWORD_DEFAULT);
-                // $query = "INSERT INTO `users` (username, email, password) VALUES('$name','$email','$hashed')";
-                $data = array('name'=>$name, 'email'=>$email, 'password'=>$hashed);
-                $result = $query->insertData('users',$data);
-                if($result){
-                    session_start();
-                    $_SESSION['user_id'] = mysqli_insert_id($db->getConn());
-                    $_SESSION['user_name'] = $name;
-                    $_SESSION['loggedin']=true;
-                    header("location: account.php");
-                }else{
-                    $error = "could not sign up at the moment, please try later!";
-                }                                 
-            }    
+            $check_email = $query->getDataWhere("email","admins","WHERE email = '".$email."'");
+                if ($check_email->num_rows > 0) {
+                    $emailErr = "This Email is already taken, try different Email";
+                }
+            }
+        }
+
+        if (empty($password)) {
+            $passwordErr = "Password is Required";
+        } else {
+            if(strlen($password) < 6){
+                $passwordErr = "Password must contain at least 6 characters";
+            }elseif(!preg_match("#[0-9]+#",$password)){
+                $passwordErr = "Password must contain atleast one number";
+            }else{
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            }
+        }
+
+        if (empty($nameErr) && empty($emailErr) && empty($passwordErr)) {         
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            // $query = "INSERT INTO `users` (username, email, password) VALUES('$name','$email','$hashed')";
+            $data = array('name'=>$name, 'email'=>$email, 'password'=>$hashed);
+            $result = $query->insertData('users',$data);
+            if($result){
+                session_start();
+                $_SESSION['user_id'] = mysqli_insert_id($db->getConn());
+                $_SESSION['user_name'] = $name;
+                $_SESSION['loggedin']=true;
+                header("location: account.php");
+            }else{
+                $error = "could not sign up at the moment, please try later!";
+            }                                 
+        }else{
+            $error	= "<div class='alert alert-danger' role='alert'><strong><p>There were some errors</p></strong></div>";
+            
         }
 
     }
@@ -76,13 +90,16 @@
             </div>
             
             <label for="name">Full Name</label>
-            <input type="text" name="name" id="name" class="form-control" placeholder="Enter Your Full Name">
+            <input type="text" value="<?php if (!empty($name)){ echo $name; } ?>" name="name" id="name" class="form-control" placeholder="Enter Your Full Name">
+            <?php if(!empty($nameErr)) { echo "<small class='text-danger'>{$nameErr}</small><br>";} ?>
             
             <label for="email">Email address</label>
-            <input type="email" name="email" id="email" class="form-control" placeholder="Provide email">
+            <input type="email" value="<?php if (!empty($email)){ echo $email; } ?>" name="email" id="email" class="form-control" placeholder="Provide email">
+            <?php if(!empty($emailErr)) { echo "<small class='text-danger'>{$emailErr}</small><br>";} ?>
         
             <label for="Password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Your Password">
+            <input type="password" value="<?php if (!empty($password)){ echo $password; } ?>" name="password" id="password" class="form-control" placeholder="Enter Your Password">
+            <?php if(!empty($passwordErr)) { echo "<small class='text-danger'>{$passwordErr}</small><br>";} ?>
             
             <div class="my-4">
             <button type="submit" name="signup" id="submit" class="btn btn-success me-4">Sign up</button>

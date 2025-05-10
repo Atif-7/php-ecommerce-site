@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $category_id = (int)$_POST['category_id'];
     $price = $_POST['price'];
-    $description = $_POST['description'];
+    $description = htmlspecialchars($_POST['description']);
     
     // Check if a new image was uploaded
     if (!empty($_FILES['image']['name'])) {
@@ -57,38 +57,38 @@ require_once 'header.php';
 
 ?>
     <section class="shop">
-            <div class="main-heading">
-                <h2>Edit Product <span class="text-secondary">( <?= $product['name'] ?> )</span></h2>
-                <a href="products.php" class="btn link-primary">< Manage Products</a>
-                <a href="index.php" class="btn link-dark"><< Back to Admin</a>
-            </div>
+        <div class="main-heading">
+            <h2>Edit Product <span class="text-secondary">( <?= $product['name'] ?> )</span></h2>
+            <a href="products.php" class="btn link-primary">< Manage Products</a>
+            <a href="index.php" class="btn link-dark"><< Back to Admin</a>
+        </div>
 
-    <form method="POST" class="form-border mt-2" enctype="multipart/form-data">
-        <div class="admin-form">
-            <label for="name">Name:</label> <input class="form-control w-50" type="text" name="name" value="<?= $product['name'] ?>" required>
-            <label for="category">Category:</label>
-            <select class="form-select w-50" name="category_id" required>
-                <option class="fw-bold" value="<?= $product['category_id'] ?>" selected><?= $category_name ?></option>
-                <?php foreach ($categories as $cat) { 
-                    if($cat['id'] != $product['category_id']) {
-                        $cat_name = htmlspecialchars($cat['name']);
-                        echo "<option value='{$cat["id"]}'>{$cat_name}</option>'";
+        <form method="POST" class="form-border mt-2" enctype="multipart/form-data">
+            <div class="admin-form">
+                <label for="name">Name:</label> <input class="form-control w-50" type="text" name="name" value="<?= $product['name'] ?>" required>
+                <label for="category">Category:</label>
+                <select class="form-select w-50" name="category_id" required>
+                    <option class="fw-bold" value="<?= $product['category_id'] ?>" selected><?= $category_name ?></option>
+                    <?php foreach ($categories as $cat) { 
+                        if($cat['id'] != $product['category_id']) {
+                            $cat_name = htmlspecialchars($cat['name']);
+                            echo "<option value='{$cat["id"]}'>{$cat_name}</option>'";
+                        }
                     }
-                }
-                ?>
-            </select>
-            <label for="price">Price:</label> <input class="form-control w-50" type="number" name="price" step="0.1" value="<?= $product['price'] ?>" required>
-        </div>
-        <div class="admin-form mt-2">
-            <label for="description">Description:</label> <textarea class="form-control w-50" name="description"><?= $product['description'] ?></textarea>
-            <label for="current_image" class="w-20">Current Image:</label> 
-            <img src="../uploads/<?= $product['image'] ?>" width="100" class="">
-            <label for="image" class="w-20"> Change Image:</label><input class="form-control w-50" type="file" name="image" accept="image/*">
-        </div>
-        <div class="admin-form mt-3">
-            <button class="btn btn-success btn-lg text-light" type="submit">Save</button>
-        </div>
-    </form>
+                    ?>
+                </select>
+                <label for="price">Price:</label> <input class="form-control w-50" type="number" name="price" step="0.1" value="<?= $product['price'] ?>" required>
+            </div>
+            <div class="admin-form mt-2">
+                <label for="description">Description:</label> <textarea class="form-control w-50" name="description"><?= $product['description'] ?></textarea>
+                <label for="current_image" class="w-20">Current Image:</label> 
+                <img src="../uploads/<?= $product['image'] ?>" width="100" class="">
+                <label for="image" class="w-20"> Change Image:</label><input class="form-control w-50" type="file" name="image" accept="image/*">
+            </div>
+            <div class="admin-form mt-3">
+                <button class="btn btn-success btn-lg text-light" type="submit">Save</button>
+            </div>
+        </form>
     </section>
   <?php
 require_once '../footer.php'; ?>

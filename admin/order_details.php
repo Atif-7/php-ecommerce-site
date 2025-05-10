@@ -87,6 +87,4 @@ require_once '../header.php';
         } ?>
     </div>
   </section>
-</body>
-</html>
 <?php include "../footer.php" ?>

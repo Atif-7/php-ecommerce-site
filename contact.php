@@ -20,9 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     if (empty($email)) {
         $error .= "email is empty <br>";
-    }
-    if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
-        $error .= "invalid email <br>";
+    }else{
+        if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+            $error .= "Invalid Email <br>";
+        }
     }
     if (empty($message)) {
         $error .= "message is empty <br>";

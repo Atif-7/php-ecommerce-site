@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $category_id = (int)$_POST['category_id'];
     $price = $_POST['price'];
-    $description = $_POST['description'];
+    $description = htmlspecialchars($_POST['description']);
     // Image upload handling
     if (!empty($_FILES['image']['name'])) {
         $target_dir = "../uploads/";

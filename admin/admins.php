@@ -9,17 +9,52 @@ require_once '../config/database.php';
 $conn = $db->getConn();
 
 // Add Admin
+$name = $email = $password = $nameErr = $emailErr = $passwordErr = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_admin'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
+    if (empty($name)) {
+        $nameErr = "Name is Required";
+    }else {
+        if(!preg_match("/^[a-zA-Z ]*$/", $name)){
+            $nameErr = "only letters and white space allowed";
+        }
+    }
+    if (empty($email)) {
+        $emailErr = "Email is Required";
+    } else {
+        if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+            $emailErr = "Invalid Email Address";
+        }else {
+           $check_email = $query->getDataWhere("email","admins","WHERE email = '".$email."'");
+            if ($check_email->num_rows > 0) {
+                $emailErr = "This Email Address already exists, try different Email";
+            }
+        }
+    }
+    if (empty($password)) {
+        $passwordErr = "Password is Required";
+    } else {
+        if(strlen($password) < 6){
+            $passwordErr = "Password must contain at least 6 characters";
+        }elseif(!preg_match("#[0-9]+#",$password)){
+            $passwordErr = "Password must contain atleast one number";
+        }else{
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        }
+    }
 
-    $stmt = $conn->prepare("INSERT INTO admins (name,email, password) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $name, $email, $password);
-    if($stmt->execute()){
-        $_SESSION['success'] = "{$name} added successfully";
-    }else{
-        $_SESSION['error'] = "failed to add admin";
+    if (empty($nameErr) && empty($emailErr) && empty($passwordErr)) {
+        $stmt = $conn->prepare("INSERT INTO admins (name,email, password) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $name, $email, $password);
+        if($stmt->execute()){
+            $_SESSION['success'] = "{$name} added successfully";
+            header("location: admins.php");
+            exit;
+        }else{
+            $_SESSION['error'] = "failed to add admin";
+        }
     }
 }
 
@@ -45,7 +80,6 @@ if (isset($_GET['delete'])) {
         };
     }
 }
-
 // Fetch Admins
 $result = $query->getData("*","admins","all")->fetch_all(MYSQLI_ASSOC);
 
@@ -83,9 +117,18 @@ require_once 'header.php';
     <form class="form w-75 my-2 form-border" method="post">
         <legend class="text-center">Add Admin</legend>
         <div class="admin-form">
-            <input class="form-control w-25 col-md-5" placeholder="Name:" type="text" name="name" required>
-            <input class="form-control w-25 col-md-5" placeholder="Email: " type="email" name="email" required>
-            <input class="form-control w-25 col-md-5" type="password" placeholder="Password:" name="password" required>
+            <div>
+                <input class="form-control" value="<?php if(!empty($name)) { echo $name;} ?>" placeholder="Name:" type="text" name="name" required>
+                <?php if(!empty($nameErr)) { echo "<small class='text-danger'>{$nameErr}</small>";} ?>
+            </div>
+            <div>
+                <input class="form-control" value="<?php if(!empty($email)) { echo $email;} ?>" placeholder="Email: " type="email" name="email" required>
+                <?php if(!empty($emailErr)) { echo "<small class='text-danger'>{$emailErr}</small>";} ?>
+            </div>
+            <div>
+                <input class="form-control" type="password" placeholder="Password:" name="password" required>
+                <?php if(!empty($passwordErr)) { echo "<small class='text-danger'>{$passwordErr}</small>";} ?>
+            </div>
             <button type="submit"  name="add_admin" class="btn btn-success">Add Admin</button>
         </div>
     </form>
@@ -102,7 +145,7 @@ require_once 'header.php';
         </thead>
         <tbody>
             <?php
-            foreach ($result as $key => $row): if ($row['name'] != $_SESSION['admin_name']):
+            foreach ($result as $key => $row): if ($row['id'] != $_SESSION['admin_id']):
             ?>
             <tr scop="row">
                 <td data-label="S. No"><?php echo $key + 1 ?></td>
