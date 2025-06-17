@@ -1,5 +1,6 @@
 <?php
   session_start();
+  require_once '../config/database.php';
 
   if (array_key_exists("logout",$_GET)) {
 
@@ -9,13 +10,32 @@
 	}elseif (array_key_exists('loggedin',$_SESSION)) {
 		header('Location: account.php');
 	}
+  
+  if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
+    $token = $_COOKIE['remember_me'];
+    $hashedToken = hash('sha256', $token);
+
+    $stmt = $db->getConn()->prepare("SELECT id, name FROM users WHERE remember_token = ? AND token_expires > NOW()");
+    $stmt->bind_param("s", $hashedToken);
+    $stmt->execute();
+    $stmt->bind_result($userId, $userName);
+
+    if ($stmt->fetch()) {
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_name'] = $userName;
+        $_SESSION['loggedin']=true;
+        header('Location: account.php');
+    } else {
+        setcookie('remember_me', '', time() - 3600, "/");
+    }
+}
 
   $email = $password = $emailErr = $passwordErr = $error = "";
   if ($_SERVER['REQUEST_METHOD']=="POST") {
-    require_once '../config/database.php';
 
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $remember = isset($_POST['remember']);
 
     if (empty($email)) {
       $emailErr = "Email is Required";
@@ -38,9 +58,25 @@
           if (password_verify($password, $row['password'])) {
             session_start();
             $_SESSION['user_id'] = $row['id'];
+            session_regenerate_id(true);
             $_SESSION['user_name'] = $row['name'];
-            $_SESSION['activation'] = $row['activated'];
+            // $_SESSION['activation'] = $row['activated'];
             $_SESSION['loggedin']=true;
+
+            if (isset($_POST['remember'])) {
+              $token = bin2hex(random_bytes(32)); // Generate secure token
+              $hashedToken = hash('sha256', $token);
+             $expires = date('Y-m-d H:i:s', strtotime('+1 day'));
+          
+              // Save hashed token and expiry to database
+              $stmt = $db->getConn()->prepare("UPDATE users SET remember_token=?, token_expires=? WHERE id=?");
+              $stmt->bind_param("ssi", $hashedToken, $expires, $_SESSION['user_id']);
+              $stmt->execute();
+          
+              // Set cookie with token
+              setcookie('remember_me', $token, time() + (86400 * 1), "/", "", true, true); // secure & httpOnly
+          }
+          
             header('Location: account.php');
           }else{
             $error = "<div class='alert alert-danger' role='alert'>This Password is incorrect.</div>";
@@ -77,12 +113,14 @@
       <input type="email" name="email" value="<?php if(!empty($email)) { echo $email;} ?>" class="form-control" ariadescribedby="emailHelp" placeholder="Provide email">
       <?php if(!empty($emailErr)) { echo "<small class='text-danger'>{$emailErr}</small><br>";} ?>
 
-      <label for="Password">Password</label>
+      <label for="Password" class="mt-2">Password</label>
       <input type="password" name="password" id="password2" class="form-control" placeholder="Enter Your Password" required>
       <?php if(!empty($passwordErr)) { echo "<small class='text-danger'>{$passwordErr}</small>";} ?>
-
-      <div class="my-4">
-        <button type="submit" name="login" class="btn btn-success me-4">Log in</button>
+      
+      <label>
+      <input type="checkbox" name="remember" class="mt-3"> Remember me</label>
+      <div class="my-3">
+        <button type="submit" name="login" class="btn btn-success me-4">Login</button>
         <small>yet not signup?</small>
         <a href="signup.php" class="fs-5 mx-2 text-decoration-none"> Signup Now</a>
       </div>
